@@ -3,8 +3,8 @@
 </script>
 
 <template>
+<div class="container px-4 mt-16 mx-auto">
+  <router-view/>
 
-  <h1 class="text-4xl bg-red-400">Hello from vue</h1>
-  <HelloWorld msg="Hello Vue 3 + Vite" />
+</div>
 </template>
-
