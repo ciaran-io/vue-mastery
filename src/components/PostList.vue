@@ -1,5 +1,10 @@
 <script setup>
 import { users } from '@/data/data.json';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import localizedDate from 'dayjs/plugin/localizedFormat'
+dayjs.extend(relativeTime);
+dayjs.extend(localizedDate);
 
 const props = defineProps({
   posts: {
@@ -8,6 +13,13 @@ const props = defineProps({
   },
 });
 
+
+// change unix timestamp to relative time
+const timeFromNow = (timestamp) => dayjs.unix(timestamp).fromNow();
+
+const humanReadableDate = (timestamp) => dayjs.unix(timestamp).format('llll')
+
+// Return user that postsed in thread
 const userById = (userId) => users.find((post) => post.id === userId);
 
 </script>
@@ -45,12 +57,16 @@ const userById = (userId) => users.find((post) => post.id === userId);
     </figure>
 
     <!-- thread text -->
-    <div class="mt-4 rounded bg-gray-100 p-6 shadow-md md:mt-0">
+    <div
+      class="mt-4 flex flex-wrap rounded bg-gray-100 px-4 pt-6 pb-2 shadow-md md:mt-0"
+    >
       <p class="break-words">
         {{ post.text }}
       </p>
-      <div class="pt-8 text-right">Posted on {{ post.publishedAt }}</div>
-    </div>
 
+      <div class="mt-auto ml-auto pt-8 text-orange-400" :title="humanReadableDate(post.publishedAt)">
+        {{ timeFromNow(post.publishedAt) }}
+      </div>
+    </div>
   </div>
 </template>
