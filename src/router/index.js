@@ -11,7 +11,7 @@ const routes = [
     component: Home,
   },
   {
-    path: '/thread/id=:id',
+    path: '/thread/:id',
     name: 'ThreadDisplay',
     component: ThreadDisplay,
     props: true,
