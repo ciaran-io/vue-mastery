@@ -1,23 +1,12 @@
 <script setup>
 import { users } from '@/data/data.json';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
-import localizedDate from 'dayjs/plugin/localizedFormat'
-dayjs.extend(relativeTime);
-dayjs.extend(localizedDate);
-
+import AppDate from './AppDate.vue';
 const props = defineProps({
   posts: {
     type: Array,
     required: true,
   },
 });
-
-
-// change unix timestamp to relative time
-const timeFromNow = (timestamp) => dayjs.unix(timestamp).fromNow();
-
-const humanReadableDate = (timestamp) => dayjs.unix(timestamp).format('llll')
 
 // Return user that postsed in thread
 const userById = (userId) => users.find((post) => post.id === userId);
@@ -64,8 +53,8 @@ const userById = (userId) => users.find((post) => post.id === userId);
         {{ post.text }}
       </p>
 
-      <div class="mt-auto ml-auto pt-8 text-orange-400" :title="humanReadableDate(post.publishedAt)">
-        {{ timeFromNow(post.publishedAt) }}
+      <div class="mt-auto ml-auto pt-8 text-orange-400" >
+      <appDate :timestamp="post.publishedAt"/>
       </div>
     </div>
   </div>
