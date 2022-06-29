@@ -2,8 +2,10 @@
 import { computed, ref } from 'vue';
 import { threads, posts } from '@/data/data.json';
 import PostList from '../components/PostList.vue';
+import PostEditor from '../components/PostEditor.vue';
 
 const reactivePosts = ref(posts)
+
 const props = defineProps({
   id: {
     required: true,
@@ -11,59 +13,32 @@ const props = defineProps({
   },
 });
 
-const addPost = () => {
-  const postId = 'gggg' + Math.random();
-  const post = {
-    id: postId,
-    text: newPostText.value,
-    publishedAt: Math.floor(Date.now() / 1000),
-    threadId: props.id,
-    userId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2',
-  };
-  // update posts and thread
-  reactivePosts.value.push(post);
-  thread.value.posts.push(postId)
-  
-  newPostText.value = ''
-};
-
-const newPostText = ref('');
-//  Return threads that mathc route params
+//  Return threads that match route params
 const threadPosts = computed(() =>
   reactivePosts.value.filter((post) => post.threadId === props.id)
 );
 
-//  Return threads that match route parameters
+//  Return first thread that matches route parameters
 const thread = computed(() => threads.find((thread) => thread.id === props.id));
+
+const addPost = (eventData) => {
+  const post = {
+    ...eventData.post,
+    threadId: props.id,
+  };
+  // update all posts with new post object
+  reactivePosts.value.push(post);
+  // update current thread with new post
+  thread.value.posts.push(post.id)
+};
 </script>
 
 <template>
   <div class="mt-32 space-y-16">
     <hr />
-    <h1 class="text-center text-3xl text-orange-500">{{ thread.title }}</h1>
+    <h1 class="text-center text-3xl text-orange-500 break-words">{{ thread.title }}</h1>
 
     <post-list :posts="threadPosts"></post-list>
-
-    <div>
-      <form @submit.prevent="addPost()">
-        <div>
-          <textarea
-            v-model="newPostText"
-            name=""
-            id=""
-            rows="10"
-            class="w-full rounded-md border border-orange-400 p-2"
-          ></textarea>
-        </div>
-      <div class="mt-4 text-right">
-        <button
-          type="submit"
-          class="rounded-full bg-orange-500 px-5 py-2 text-white"
-        >
-          Submit post
-        </button>
-      </div>
-      </form>
-    </div>
+    <post-editor @save="addPost"></post-editor>
   </div>
 </template>
