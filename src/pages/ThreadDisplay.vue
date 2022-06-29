@@ -1,8 +1,9 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
+import { threads, posts } from '@/data/data.json';
+import PostList from '../components/PostList.vue';
 
-import { threads, posts, users } from '@/data/data.json';
-
+const reactivePosts = ref(posts)
 const props = defineProps({
   id: {
     required: true,
@@ -10,10 +11,29 @@ const props = defineProps({
   },
 });
 
-const userById = (userId) => users.find((post) => post.id === userId);
+const addPost = () => {
+  const postId = 'gggg' + Math.random();
+  const post = {
+    id: postId,
+    text: newPostText.value,
+    publishedAt: Math.floor(Date.now() / 1000),
+    threadId: props.id,
+    userId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2',
+  };
+  // update posts and thread
+  reactivePosts.value.push(post);
+  thread.value.posts.push(postId)
+  
+  newPostText.value = ''
+};
 
-const postById = (postId) => posts.find((post) => post.id === postId);
+const newPostText = ref('');
+//  Return threads that mathc route params
+const threadPosts = computed(() =>
+  reactivePosts.value.filter((post) => post.threadId === props.id)
+);
 
+//  Return threads that match route parameters
 const thread = computed(() => threads.find((thread) => thread.id === props.id));
 </script>
 
@@ -22,47 +42,28 @@ const thread = computed(() => threads.find((thread) => thread.id === props.id));
     <hr />
     <h1 class="text-center text-3xl text-orange-500">{{ thread.title }}</h1>
 
-    <div
-      v-for="postId in thread.posts"
-      :key="postId"
-      class="md:grid md:grid-cols-[1fr,2fr] md:gap-y-6 md:gap-x-4"
-    >
-      <!-- user & post count -->
-      <figure
-        class="h-fit max-h-48 rounded-md bg-orange-300 p-2 text-white shadow-md"
-      >
-        <div class="flex items-center md:gap-x-4">
-          <img
-            :src="userById(postById(postId).userId).avatar"
-            :alt="`picture of ${userById(postById(postId).userId).name}`"
-            height="80"
-            width="80"
-            class="h-12 w-12 rounded-full object-cover md:h-20 md:w-20"
-          />
-          <div
-            class="font-semi w-full font-semibold  text-center text-gray-600 md:text-left"
-          >
-            {{ userById(postById(postId).userId).name }}
-          </div>
-        </div>
+    <post-list :posts="threadPosts"></post-list>
 
-        <div
-          class="mt-6 w-full rounded-2xl bg-gray-100 py-1 px-2 text-center text-gray-700"
+    <div>
+      <form @submit.prevent="addPost()">
+        <div>
+          <textarea
+            v-model="newPostText"
+            name=""
+            id=""
+            rows="10"
+            class="w-full rounded-md border border-orange-400 p-2"
+          ></textarea>
+        </div>
+      <div class="mt-4 text-right">
+        <button
+          type="submit"
+          class="rounded-full bg-orange-500 px-5 py-2 text-white"
         >
-          107 posts
-        </div>
-      </figure>
-
-      <!-- thread text -->
-      <div class="mt-4 rounded bg-gray-100 p-6 shadow-md md:mt-0">
-        <p class="break-words">
-          {{ postById(postId).text }}
-        </p>
-        <div class="pt-8 text-right">
-          Posted on {{ postById(postId).publishedAt }}
-        </div>
+          Submit post
+        </button>
       </div>
+      </form>
     </div>
   </div>
- 
 </template>
