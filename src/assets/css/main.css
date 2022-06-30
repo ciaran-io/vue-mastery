@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.forum {
+  @apply mt-2 rounded-md p-4 shadow-lg;
+
+  &-title {
+    @apply min-w-max rounded-bl-2xl bg-orange-500 py-2 pl-2 text-white;
+  }
+
+  &-heading {
+    @apply text-3xl text-orange-500;
+  }
+
+  &-link {
+    @apply font-semibold hover:text-orange-500;
+  }
+
+  &-border {
+    @apply border-b-2 border-orange-200 py-4;
+  }
+}
