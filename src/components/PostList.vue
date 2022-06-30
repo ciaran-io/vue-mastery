@@ -9,7 +9,6 @@ const props = defineProps({
 
 // Return user that postsed in thread
 const userById = (userId) => users.find((post) => post.id === userId);
-
 </script>
 
 <template>
@@ -48,13 +47,19 @@ const userById = (userId) => users.find((post) => post.id === userId);
     <div
       class="mt-4 flex flex-wrap rounded bg-gray-100 px-4 pt-6 pb-2 shadow-md md:mt-0"
     >
-      <p class="break-words">
+      <p class="word-break">
         {{ post.text }}
       </p>
 
-      <div class="mt-auto ml-auto pt-8 text-orange-400" >
-      <AppDate :timestamp="post.publishedAt"/>
+      <div class="mt-auto ml-auto pt-8 text-orange-400">
+        <AppDate :timestamp="post.publishedAt" />
       </div>
     </div>
   </div>
 </template>
+
+<style lang="css" scoped>
+.word-break {
+  word-break: break-word;
+}
+</style>
