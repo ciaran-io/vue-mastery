@@ -1,8 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
 import { threads, posts } from '@/data/data.json';
-import PostList from '../components/PostList.vue';
-import PostEditor from '../components/PostEditor.vue';
 
 const reactivePosts = ref(posts)
 

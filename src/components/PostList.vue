@@ -1,6 +1,5 @@
 <script setup>
 import { users } from '@/data/data.json';
-import AppDate from './AppDate.vue';
 const props = defineProps({
   posts: {
     type: Array,
@@ -54,7 +53,7 @@ const userById = (userId) => users.find((post) => post.id === userId);
       </p>
 
       <div class="mt-auto ml-auto pt-8 text-orange-400" >
-      <appDate :timestamp="post.publishedAt"/>
+      <AppDate :timestamp="post.publishedAt"/>
       </div>
     </div>
   </div>

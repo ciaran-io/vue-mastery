@@ -1,7 +1,7 @@
 <script setup>
-import { ref} from 'vue'
+import { ref } from 'vue';
 
-const emit = defineEmits(['save'])
+const emit = defineEmits(['save']);
 
 const postText = ref('');
 
@@ -13,10 +13,9 @@ const save = () => {
     publishedAt: Math.floor(Date.now() / 1000),
     userId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2',
   };
-  emit('save', { post } )
-  postText.value = ''
+  emit('save', { post });
+  postText.value = '';
 };
-
 </script>
 
 <template>

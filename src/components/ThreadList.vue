@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue';
 import { users } from '@/data/data.json';
-import AppDate from './AppDate.vue';
 
 const props = defineProps({
   threads: {
@@ -51,7 +50,7 @@ const pluralise = computed(() => (word) => {
 
       <!-- thread creator -->
       <div
-        class="thread-creator-container flex items-center gap-x-4 text-right md:flex-row md:flex-wrap md:gap-x-12 md:text-left"
+        class="thread-creator-container flex items-center  md:flex-row md:flex-wrap justify-end gap-x-4 md:gap-x-0 md; md:justify-between  "
       >
         <!-- thread count -->
         <div class="min-w-max">
@@ -81,12 +80,4 @@ const pluralise = computed(() => (word) => {
   </section>
 </template>
 
-<style lang="css">
-.thread-creator-container {
-  @apply justify-end;
-  
-  @screen md {
-    justify-content: unset;
-  }
-}
-</style>
+

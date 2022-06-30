@@ -1,6 +1,5 @@
 <script setup>
 import { threads } from '@/data/data.json'
-import ThreadList from '@/components/ThreadList.vue';
 </script>
 
 <template>
