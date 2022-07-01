@@ -5,6 +5,10 @@
 .forum {
   @apply mt-2 rounded-md p-4 shadow-lg;
 
+  & >li:not(:last-child) {
+    @apply border-b-2 border-orange-200;
+  }
+
   &-title {
     @apply min-w-max rounded-bl-2xl bg-orange-500 py-2 pl-2 text-white;
   }
@@ -17,7 +21,8 @@
     @apply font-semibold hover:text-orange-500;
   }
 
-  &-border {
-    @apply border-b-2 border-orange-200 py-4;
+  &-spacing {
+    @apply py-4;
   }
+
 }
