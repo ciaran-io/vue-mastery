@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '@/pages/Home.vue';
+import Profile from '@/pages/Profile.vue';
 import Category from '@/pages/Category.vue';
 import Forum from '@/pages/Forum.vue';
 import ThreadDisplay from '@/pages/ThreadDisplay.vue';
@@ -11,6 +12,11 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+  },
+  {
+    path: '/my-profile',
+    name: 'Profile',
+    component: Profile,
   },
   {
     path: '/category/:id',
