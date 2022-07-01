@@ -2,13 +2,11 @@
 import { ref } from 'vue';
 
 const emit = defineEmits(['save']);
-
 const postText = ref('');
 
 const save = () => {
-  const postId = 'gggg' + Math.random();
+  
   const post = {
-    id: postId,
     text: postText.value,
     publishedAt: Math.floor(Date.now() / 1000),
     userId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2',

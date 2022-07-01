@@ -1,5 +1,7 @@
 <script setup>
-import { users } from '@/data/data.json';
+import { useStore } from '@/stores/index'
+const store = useStore()
+
 const props = defineProps({
   posts: {
     type: Array,
@@ -8,7 +10,7 @@ const props = defineProps({
 });
 
 // Return user that postsed in thread
-const userById = (userId) => users.find((post) => post.id === userId);
+const userById = store.getUserById;
 </script>
 
 <template>

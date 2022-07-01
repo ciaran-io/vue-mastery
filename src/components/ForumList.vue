@@ -38,7 +38,7 @@ const forumThreadsWord = (forum) => {
       <li
         v-for="forum in props.forums"
         :key="forum.id"
-        class="forum-border grid md:grid-cols-2"
+        class="forum-spacing grid md:grid-cols-2"
       >
         <div>
           <router-link

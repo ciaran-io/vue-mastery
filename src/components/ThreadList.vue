@@ -1,6 +1,7 @@
 <script setup>
-import { users } from '@/data/data.json';
+import { useStore } from '@/stores/index'
 
+const store = useStore()
 const props = defineProps({
   threads: {
     type: Array,
@@ -8,7 +9,7 @@ const props = defineProps({
   },
 });
 
-const userById = (userId) => users.find((post) => post.id === userId);
+const userById = store.getUserById
 
 //  Return pluralised word
 const threadPostsWord = (thread) => {
@@ -30,7 +31,7 @@ const threadPostsWord = (thread) => {
       <li
         v-for="thread in props.threads"
         :key="thread.id"
-        class="grid forum-border md:grid-cols-[2fr,1fr] md:items-center"
+        class="grid forum-spacing md:grid-cols-[2fr,1fr] md:items-center"
       >
         <div>
           <p class="forum-link">

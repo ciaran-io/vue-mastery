@@ -1,9 +1,7 @@
 <script setup>
-import { computed, ref } from 'vue';
-import { threads, posts } from '@/data/data.json';
+import { useStore } from '@/stores/index'
 
-const reactivePosts = ref(posts)
-
+const store = useStore()
 const props = defineProps({
   id: {
     required: true,
@@ -11,13 +9,11 @@ const props = defineProps({
   },
 });
 
-//  Return threads that match route params
-const threadPosts = computed(() =>
-  reactivePosts.value.filter((post) => post.threadId === props.id)
-);
+//  Return threads posts that match route params
+const threadPosts = store.getPostById(props.id)
 
 //  Return first thread that matches route parameters
-const thread = computed(() => threads.find((thread) => thread.id === props.id));
+const thread = store.getThreadById(props.id);
 
 const addPost = (eventData) => {
   const post = {
@@ -25,18 +21,18 @@ const addPost = (eventData) => {
     threadId: props.id,
   };
   // update all posts with new post object
-  reactivePosts.value.push(post);
-  // update current thread with new post
-  thread.value.posts.push(post.id)
+  store.createPost(post, props.id);
 };
 </script>
 
 <template>
   <div class="mt-32 space-y-16">
     <hr />
-    <h1 class="text-center text-3xl text-orange-500 break-words">{{ thread.title }}</h1>
+    <h1 class="text-center text-3xl text-orange-500 break-words">
+      {{ thread.title }} hi worls
+      </h1>
 
-    <post-list :posts="threadPosts"></post-list>
-    <post-editor @save="addPost"></post-editor>
+     <post-list :posts="threadPosts"></post-list>
+    <post-editor @save="addPost"></post-editor> 
   </div>
 </template>

@@ -1,9 +1,7 @@
 <script setup>
-import { computed } from 'vue';
+import { useStore } from '@/stores/index'
 
-import { categories, forums } from '@/data/data.json';
-console.log(categories);
-
+const store = useStore()
 const props = defineProps({
   id: {
     type: String,
@@ -11,19 +9,15 @@ const props = defineProps({
   },
 });
 
-const category = computed(() =>
-  categories.find((category) => category.id === props.id)
-);
+const category = store.getCategoryById(props.id);
+const getForumsByCategory = store.getForumsByCategory(category.id)
 
-const getFormsByCategory = computed(
-  () => (category) => forums.filter((forum) => forum.categoryId === category.id)
-);
 </script>
 
 <template>
   <h1 class="forum-heading">{{ category.name }}</h1>
   <ForumList
-    :forums="getFormsByCategory(category)"
+    :forums="getForumsByCategory"
     :title="category.name"
   ></ForumList>
 </template>

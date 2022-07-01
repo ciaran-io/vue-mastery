@@ -1,9 +1,11 @@
 <script setup>
-import { categories } from '@/data/data.json';
+import { useStore } from '@/stores/index'
+const store = useStore()
+const categories = store.getAllCategories
+
 </script>
 
 <template>
-  <h1 class="text-2xl">Welcome to the Forum</h1>
-  
+  <h1 class="forum-heading text-center">Welcome to the Forum</h1>
   <CategoryList :categories="categories" />
 </template>

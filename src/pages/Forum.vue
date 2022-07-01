@@ -1,7 +1,7 @@
 <script setup>
-import { forums, threads } from '@/data/data.json';
-import { computed } from 'vue';
+import { useStore } from '@/stores/index';
 
+const store = useStore();
 const props = defineProps({
   id: {
     type: String,
@@ -9,11 +9,9 @@ const props = defineProps({
   },
 });
 
-const forum = computed(() => forums.find((forum) => forum.id === props.id));
+const forum = store.getForumById(props.id);
+const threads = store.getThreadsById(props.id);
 
-const thread = computed(() =>
-  threads.filter((thread) => thread.forumId === props.id)
-);
 </script>
 
 <template>
@@ -31,6 +29,6 @@ const thread = computed(() =>
       </router-link>
     </div>
 
-    <thread-list :threads="thread"> </thread-list>
+    <thread-list :threads="threads"> </thread-list>
   </section>
 </template>

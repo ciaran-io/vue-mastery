@@ -1,6 +1,6 @@
 <script setup>
-import { forums } from '@/data/data.json';
-
+import { useStore } from '@/stores/index'
+const store = useStore()
 const props = defineProps({
   categories: {
     type: Array,
@@ -8,15 +8,14 @@ const props = defineProps({
   },
 });
 
-const getFormsByCategory = (category) =>
-  forums.filter((forum) => forum.categoryId === category.id);
+const getForumsByCategory = store.getForumsByCategory
 </script>
 
 <template>
   <ForumList
     v-for="category in props.categories"
     :key="category.id"
-    :forums="getFormsByCategory(category)"
+    :forums="getForumsByCategory(category.id)"
     :title="category.name"
     :categoryId="category.id"
   ></ForumList>
