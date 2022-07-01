@@ -3,9 +3,13 @@ import sourceData from '@/data/data';
 export const useStore = defineStore('main', {
   state: () => ({
     ...sourceData,
+    authId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2',
   }),
 
   getters: {
+    // Return user matcing authId
+    authUser: (state) => state.users.find((user) => user.id === state.authId),
+
     // return category matching prop.id value
     getCategoryById: (state) => {
       return (propId) =>
