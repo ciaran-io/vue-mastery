@@ -2,14 +2,12 @@
 import { ref } from 'vue';
 
 const emit = defineEmits(['save']);
+
 const postText = ref('');
 
 const save = () => {
-  
   const post = {
     text: postText.value,
-    publishedAt: Math.floor(Date.now() / 1000),
-    userId: '7uVPJS9GHoftN58Z2MXCYDqmNAh2',
   };
   emit('save', { post });
   postText.value = '';
@@ -27,13 +25,12 @@ const save = () => {
         class="w-full rounded-md border border-orange-400 p-2"
       ></textarea>
     </div>
+
     <div class="mt-4 text-right">
-      <button
-        type="submit"
-        class="rounded-full bg-orange-500 px-5 py-2 text-white"
-      >
+      <button type="submit" class="buton button-pill button-primary">
         Submit post
       </button>
     </div>
+    
   </form>
 </template>
