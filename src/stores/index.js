@@ -38,12 +38,35 @@ export const useStore = defineStore('main', {
 
     // return category matching prop.id value
     getCategoryById: (state) => {
-      return (propId) => findById(state.categories, propId);
+      return (id) => findById(state.categories, id);
     },
 
     // return forum matching prop.id value
     getForumById: (state) => {
-      return (propId) => findById(state.forums, propId);
+      return (id) => findById(state.forums, id);
+    },
+
+    // Return a thread matching prop.id value
+    getThreadById: (state) => {
+      return (id) => {
+        const thread = findById(state.threads, id);
+        return {
+          ...thread,
+
+          get author() {
+            return findById(state.users, thread.userId);
+          },
+
+          get repliesCount() {
+            // first post is content of thread
+            return thread.posts.length - 1;
+          },
+
+          get contributorsCount() {
+            return thread.contributors.length;
+          },
+        };
+      };
     },
 
     // return threads matching prop.id value
@@ -52,14 +75,9 @@ export const useStore = defineStore('main', {
         state.threads.filter((thread) => thread.forumId === propId);
     },
 
-    // Return a thread matching prop.id value
-    getThreadById: (state) => {
-      return (propId) => findById(state.threads, propId);
-    },
-
     // return posts threadId matching prop.id value
     getPostById: (state) => {
-      return (propId) => state.posts.filter((post) => post.threadId === propId);
+      return (id) => state.posts.filter((post) => post.threadId === id);
     },
 
     // return threads matching category.id value
@@ -89,6 +107,11 @@ export const useStore = defineStore('main', {
       (post.publishedAt = Math.floor(Date.now() / 1000)),
         // push new post to post array
         this.setPost({ post });
+
+      this.appendContributorToThread({
+        parentId: post.threadId,
+        childId: this.authId,
+      });
       this.appendPostToThread({ parentId: post.threadId, childId: post.id });
     },
 
@@ -124,7 +147,7 @@ export const useStore = defineStore('main', {
       try {
         const thread = findById(this.threads, id);
         const post = findById(this.posts, thread.posts[0]);
-        console.log(thread);
+
         const newThread = { ...thread, title };
         const newPosts = { ...post, text };
 
@@ -136,6 +159,11 @@ export const useStore = defineStore('main', {
         console.log(error);
       }
     },
+
+    appendContributorToThread: makeAppendChildParentAction({
+      parent: 'threads',
+      child: 'contributors',
+    }),
 
     appendPostToThread: makeAppendChildParentAction({
       parent: 'threads',
@@ -174,10 +202,13 @@ export const useStore = defineStore('main', {
 function makeAppendChildParentAction({ parent, child }) {
   return ({ parentId, childId }) => {
     // NOTE: useStore()[parent] is the same as useStore().parent cant use '.' after variable
-    const resource = findById(useStore()[parent], parentId);
 
+    const resource = findById(useStore()[parent], parentId);
     resource[child] = resource[child] || [];
-    resource[child].push(childId);
+    // check if resource child has id and if not add new id
+    if (!resource[child].includes(childId)) {
+      resource[child].push(childId);
+    }
   };
 }
 
