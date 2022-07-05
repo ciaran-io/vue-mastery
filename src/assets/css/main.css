@@ -26,3 +26,37 @@
   }
 
 }
+
+.avatar {
+  @apply rounded-full object-cover;
+
+  &-post {
+    @apply h-12 w-12 md:h-16 md:w-16;
+  }
+
+  &-profile {
+    @apply rounded-md
+  }
+}
+
+.button {
+  &-pill {
+     @apply rounded-full px-4 py-1 text-white;
+  }
+
+  &-primary {
+    @apply bg-orange-500;
+  }
+
+  &-danger {
+    @apply bg-red-500;
+  }
+
+  &-submit {
+    @apply bg-teal-600;
+  }
+
+  &-lg {
+    @apply px-4 py-2
+  }
+}
