@@ -34,16 +34,27 @@ function editThread() {
 </script>
 
 <template>
-  <div class="mt-32 space-y-16">
-    <hr />
+  <div class="mt-32 space-y-8">
     <h1 class="break-words text-center text-3xl text-orange-500">
       {{ thread.title }}
     </h1>
+    <hr />
 
     <div class="ml-auto w-max">
       <button @click="editThread" class="button-pill button-submit">
         Edit thread
       </button>
+    </div>
+
+    <div class="flex justify-between text-gray-500">
+      <p>
+        By {{ thread.author.name }},
+        <app-date :timestamp="thread.publishedAt"></app-date>
+      </p>
+      <p>
+        {{ thread.repliesCount }} replies by
+        {{ thread.contributorsCount }} contributors
+      </p>
     </div>
 
     <post-list :posts="threadPosts"></post-list>
