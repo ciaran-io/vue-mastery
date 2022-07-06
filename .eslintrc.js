@@ -18,12 +18,11 @@ module.exports = {
     'vue/multi-word-component-names': [
       'error',
       {
-        ignores: ['Home', 'Forum', 'Category'],
+        ignores: ['Home', 'Forum', 'Category', 'Profile'],
       },
     ],
   },
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module',
   },
 };
