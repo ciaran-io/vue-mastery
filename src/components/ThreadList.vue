@@ -1,7 +1,7 @@
 <script setup>
-import { useStore } from '@/stores/index'
+import { useStore } from '@/stores/index';
 
-const store = useStore()
+const store = useStore();
 const props = defineProps({
   threads: {
     type: Array,
@@ -9,7 +9,7 @@ const props = defineProps({
   },
 });
 
-const userById = store.getUserById
+const userById = store.getUserById;
 
 //  Return pluralised word
 const threadPostsWord = (thread) => {
@@ -31,7 +31,7 @@ const threadPostsWord = (thread) => {
       <li
         v-for="thread in props.threads"
         :key="thread.id"
-        class="grid forum-spacing md:grid-cols-[2fr,1fr] md:items-center"
+        class="forum-spacing grid md:grid-cols-[2fr,1fr] md:items-center"
       >
         <div>
           <p class="forum-link">
@@ -55,12 +55,12 @@ const threadPostsWord = (thread) => {
 
         <!-- thread creator -->
         <div
-          class="md:flex items-center justify-end gap-x-4 md:flex-row md:flex-wrap md:justify-between md:gap-x-0"
+          class="items-center justify-end gap-x-4 md:flex md:flex-row md:flex-wrap md:justify-between md:gap-x-0"
         >
           <!-- thread count -->
           <div class="min-w-max">
             <!-- {{ thread.posts.length + ' replies' }}  -->
-            {{thread.posts?.length}}
+            {{ thread.repliesCount }}
             {{ threadPostsWord(thread) }}
           </div>
           <img
@@ -76,10 +76,7 @@ const threadPostsWord = (thread) => {
               {{ userById(thread.userId).name.split(' ')[0] }}
             </router-link>
             <br />
-            <AppDate
-              :timestamp="thread.publishedAt"
-              class="min-w-max"
-            />
+            <AppDate :timestamp="thread.publishedAt" class="min-w-max" />
           </div>
         </div>
       </li>

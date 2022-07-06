@@ -8,32 +8,38 @@ export const useStore = defineStore('main', {
   }),
 
   getters: {
-    // Return user matcing authId
-    authUser: (state) => {
-      const user = findById(state.users, state.authId);
+    user: (state) => {
+      return (id) => {
+        const user = findById(state.users, id);
 
-      if (!user) return null;
+        if (!user) return null;
 
-      return {
-        ...user,
-        // authuser.posts
-        // authuser.getPosts()
-        get posts() {
-          return state.posts.filter((post) => post.userId == user.id);
-        },
-        // authuser.postsCount
-        get postCount() {
-          return this.posts.length;
-        },
-        // authuser.threads
-        get threads() {
-          return state.threads.filter((post) => post.userId == user.id);
-        },
-        // authuser.threadsCount
-        get threadsCount() {
-          return this.threads.length;
-        },
+        return {
+          ...user,
+          // authuser.posts
+          // authuser.getPosts()
+          get posts() {
+            return state.posts.filter((post) => post.userId == user.id);
+          },
+          // authuser.postsCount
+          get postsCount() {
+            return this.posts.length;
+          },
+          // authuser.threads
+          get threads() {
+            return state.threads.filter((post) => post.userId == user.id);
+          },
+          // authuser.threadsCount
+          get threadsCount() {
+            return this.threads.length;
+          },
+        };
       };
+    },
+
+    // Return user matcing authId
+    authUser(state) {
+      return this.user(state.authId);
     },
 
     // return category matching prop.id value
@@ -63,7 +69,7 @@ export const useStore = defineStore('main', {
           },
 
           get contributorsCount() {
-            return thread.contributors.length;
+            return thread.contributors?.length;
           },
         };
       };

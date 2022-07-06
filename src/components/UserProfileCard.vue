@@ -28,7 +28,7 @@ defineProps({
           <div class="flex gap-x-4">
             <div>
               <span class="font-semibold">Posts</span>
-              {{ user.postCount || 'No posts yet' }}
+              {{ user.postsCount || 'No posts yet' }}
             </div>
 
             <div>

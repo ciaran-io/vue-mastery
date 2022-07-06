@@ -1,8 +1,8 @@
 <script setup>
-import { useStore } from '@/stores/index'
-const store = useStore()
+import { useStore } from '@/stores/index';
+const store = useStore();
 
-const props = defineProps({
+defineProps({
   posts: {
     type: Array,
     required: true,
@@ -10,12 +10,15 @@ const props = defineProps({
 });
 
 // Return user that postsed in thread
-const userById = store.getUserById;
+function userById(userId){
+  return store.user(userId)
+}
+
 </script>
 
 <template>
   <div
-    v-for="post in props.posts"
+    v-for="post in posts"
     :key="post.id"
     class="md:grid md:grid-cols-[1fr,2fr] md:gap-y-6 md:gap-x-4"
   >
@@ -27,9 +30,9 @@ const userById = store.getUserById;
         <img
           :src="userById(post.userId).avatar"
           :alt="`picture of ${userById(post.userId).name}`"
-          height="80"
-          width="80"
-          class="h-12 w-12 rounded-full object-cover md:h-20 md:w-20"
+          height="48"
+          width="48"
+          class="avatar avatar-post"
         />
         <div
           class="font-semi w-full text-center font-semibold text-gray-600 md:text-left"
@@ -41,19 +44,24 @@ const userById = store.getUserById;
       <div
         class="mt-6 w-full rounded-2xl bg-gray-100 py-1 px-2 text-center text-gray-700"
       >
-        107 posts
+      <p class="flex px-2 justify-between">
+        {{ userById(post.userId).postsCount }} Posts 
+        
+        <span class="block">
+          {{ userById(post.userId).threadsCount }} Threads
+        </span>
+
+      </p>
       </div>
     </figure>
 
     <!-- thread text -->
-    <div
-      class="mt-4 flex flex-wrap rounded bg-gray-100 px-4 pt-6 pb-2 shadow-md md:mt-0"
-    >
+    <div class="mt-4 rounded bg-gray-100 px-4 pt-6 pb-2 shadow-md md:mt-0">
       <p class="word-break">
         {{ post.text }}
       </p>
 
-      <div class="mt-auto ml-auto pt-8 text-orange-400">
+      <div class="mt-auto ml-auto w-max pt-8 text-orange-400">
         <AppDate :timestamp="post.publishedAt" />
       </div>
     </div>
