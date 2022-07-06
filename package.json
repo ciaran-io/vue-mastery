@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "dayjs": "^1.11.3",
+    "firebase": "^9.8.4",
+    "firestore-export-import": "^1.2.0",
     "pinia": "^2.0.14",
     "vue": "^3.2.25",
     "vue-router": "4"
