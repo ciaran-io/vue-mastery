@@ -1,9 +1,14 @@
 import { defineStore, acceptHMRUpdate } from 'pinia';
-import sourceData from '@/data/data';
 import { findById, updateAndInsert } from '@/helpers/index';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 export const useStore = defineStore('main', {
   state: () => ({
-    ...sourceData,
+    categories: [],
+    forums: [],
+    threads: [],
+    posts: [],
+    users: [],
     authId: 'ALXhxjwgY9PinwNGHpfai6OWyDu2',
   }),
 
@@ -56,6 +61,7 @@ export const useStore = defineStore('main', {
     getThreadById: (state) => {
       return (id) => {
         const thread = findById(state.threads, id);
+        if (!thread) return {};
         return {
           ...thread,
 
@@ -92,10 +98,6 @@ export const useStore = defineStore('main', {
         state.forums.filter((forum) => forum.categoryId === categoryId);
     },
 
-    getUserById: (state) => {
-      return (userId) => findById(state.users, userId);
-    },
-
     // return all categories
     getAllCategories: (state) => state.categories,
 
@@ -104,6 +106,7 @@ export const useStore = defineStore('main', {
   },
 
   actions: {
+    // Create a new posts from postEditor
     createPost(post) {
       // create random thread id
       post.id = 'gggg' + Math.random();
@@ -112,7 +115,7 @@ export const useStore = defineStore('main', {
       // create published date  for post
       (post.publishedAt = Math.floor(Date.now() / 1000)),
         // push new post to post array
-        this.setPost({ post });
+        this.setItem({ resource: 'posts', item: post });
 
       this.appendContributorToThread({
         parentId: post.threadId,
@@ -121,6 +124,7 @@ export const useStore = defineStore('main', {
       this.appendPostToThread({ parentId: post.threadId, childId: post.id });
     },
 
+    // Create new Thread from ThreadCreate
     async createThread({ title, text, forumId }) {
       try {
         const id = 'gggg' + Math.random();
@@ -136,7 +140,7 @@ export const useStore = defineStore('main', {
           id,
         };
 
-        this.setThread({ thread });
+        this.setItem({ resource: 'threads', item: thread });
         this.appendThreadToForum({ parentId: forumId, childId: id });
         this.appendThreadToUser({ parentId: userId, childId: id });
         // create a new post and append text && threadId
@@ -149,21 +153,121 @@ export const useStore = defineStore('main', {
       }
     },
 
+    // Update thread post and title
     async updateThread({ title, text, id }) {
       try {
         const thread = findById(this.threads, id);
         const post = findById(this.posts, thread.posts[0]);
-
         const newThread = { ...thread, title };
-        const newPosts = { ...post, text };
+        const newPost = { ...post, text };
 
-        this.setThread({ thread: newThread });
-        this.setPost({ post: newPosts });
+        this.setItem({ resource: 'threads', item: newThread });
+        this.setItem({ resource: 'posts', item: newPost });
 
         return newThread;
       } catch (error) {
         console.log(error);
       }
+    },
+
+    updateUser(user) {
+      this.setItem({ resource: 'users', item: user });
+    },
+
+    // ---------------------------------------
+    // Fetch Single Resource
+    // ---------------------------------------
+
+    fetchCategory({ id }) {
+      // fetch trhead from fb
+      return this.fetchItem({ resource: 'categories', id });
+    },
+
+    fetchForum({ id }) {
+      // fetch trhead from fb
+      return this.fetchItem({ resource: 'forums', id });
+    },
+
+    fetchThread({ id }) {
+      return this.fetchItem({ resource: 'threads', id });
+    },
+
+    fetchPost({ id }) {
+      // fetch trhead from fb
+      return this.fetchItem({ resource: 'posts', id });
+    },
+
+    fetchUser({ id }) {
+      // fetch trhead from fb
+      return this.fetchItem({ resource: 'users', id });
+    },
+
+    // ---------------------------------------
+    // Fetch All of a Resource
+    // ---------------------------------------
+
+    fetchAllCategories() {
+      return new Promise((resolve) => {
+        firebase
+          .firestore()
+          .collection('categories')
+          .onSnapshot((querySnapshot) => {
+            const categories = querySnapshot.docs.map((doc) => {
+              const item = { id: doc.id, ...doc.data() };
+              this.setItem({ resource: 'categories', item });
+              return item;
+            });
+            resolve(categories);
+          });
+      });
+    },
+
+    // ---------------------------------------
+    // Fetch Multiple Resources
+    // ---------------------------------------
+
+    // fetch categories from fb
+    fetchCategories({ ids }) {
+      return this.fetchItems({ resource: 'categories', ids });
+    },
+
+    // fetch forums from fb
+    fetchForums({ ids }) {
+      return this.fetchItems({ resource: 'forums', ids });
+    },
+
+    fetchThreads({ ids }) {
+      // fetch trhead from fb
+      return this.fetchItems({ resource: 'threads', ids });
+    },
+
+    fetchPosts({ ids }) {
+      // fetch trhead from fb
+      return this.fetchItems({ resource: 'posts', ids });
+    },
+
+    fetchUsers({ ids }) {
+      // fetch trhead from fb
+      return this.fetchItems({ resource: 'users', ids });
+    },
+
+    fetchItem({ id, resource }) {
+      // fetch trhead from fb
+      return new Promise((resolve) => {
+        firebase
+          .firestore()
+          .collection(resource)
+          .doc(id)
+          .onSnapshot((doc) => {
+            const item = { ...doc.data(), id: doc.id };
+            this.setItem({ resource, id, item });
+            resolve(item);
+          });
+      });
+    },
+
+    fetchItems({ ids, resource }) {
+      return Promise.all(ids.map((id) => this.fetchItem({ id, resource })));
     },
 
     appendContributorToThread: makeAppendChildParentAction({
@@ -186,21 +290,8 @@ export const useStore = defineStore('main', {
       child: 'threads',
     }),
 
-    // find stores users
-    setUser(activeUser) {
-      const userIndex = this.users.findIndex(
-        (user) => user.id == activeUser.id
-      );
-      this.users[userIndex] = activeUser;
-    },
-
-    // find stores posts matching params and update posts
-    setPost({ post }) {
-      updateAndInsert(this.posts, post);
-    },
-    // find stores threads matching params and update posts
-    setThread({ thread }) {
-      updateAndInsert(this.threads, thread);
+    setItem({ resource, item }) {
+      updateAndInsert(this[resource], item);
     },
   },
 });
@@ -210,6 +301,14 @@ function makeAppendChildParentAction({ parent, child }) {
     // NOTE: useStore()[parent] is the same as useStore().parent cant use '.' after variable
 
     const resource = findById(useStore()[parent], parentId);
+
+    if (!resource) {
+      console.warn(
+        `Appending ${child} ${childId} to ${parent} ${parentId} failed because the parent does not exist`
+      );
+      return;
+    }
+
     resource[child] = resource[child] || [];
     // check if resource child has id and if not add new id
     if (!resource[child].includes(childId)) {
