@@ -24,28 +24,45 @@ function save() {
 </script>
 
 <template>
-  <form @submit.prevent="save" class="mt-8">
+  <form
+    @submit.prevent="save"
+    class="mt-8"
+  >
     <div class="">
       <div class="">
         <label for="thread_title">Thread title</label>
-        <input v-model="form.title" type="text" name="thread_title" />
+        <input
+          v-model="form.title"
+          type="text"
+          name="thread_title"
+        />
       </div>
 
       <div>
         <label for="thred_text">Thread content</label>
-        <textarea v-model="form.text" type="text" name="thread_text"></textarea>
+
+        <textarea
+          v-model="form.text"
+          type="text"
+          name="thread_text"
+        ></textarea>
       </div>
     </div>
 
     <div class="mt-14 grid grid-flow-col items-center gap-x-8">
-      <button @click="$emit('cancel')" class="button-pill button-danger">
+      <button
+        @click="$emit('cancel')"
+        class="button-pill button-danger"
+      >
         Cancel
       </button>
 
-      <button type="submit" class="button-pill button-submit">
+      <button
+        type="submit"
+        class="button-pill button-submit"
+      >
         {{ isExistingThread ? 'Update' : 'Publish' }}
       </button>
-      
     </div>
   </form>
 </template>

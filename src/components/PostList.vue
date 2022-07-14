@@ -1,8 +1,8 @@
 <script setup>
-import { useStore } from '@/stores/index';
+import { useStore } from '@/stores';
 const store = useStore();
 
-defineProps({
+const props = defineProps({
   posts: {
     type: Array,
     required: true,
@@ -10,20 +10,20 @@ defineProps({
 });
 
 // Return user that postsed in thread
-function userById(userId){
-  return store.user(userId)
-}
-
+function userById(userId) {
+  return store.user(userId);
+  } 
 </script>
 
 <template>
   <div
-    v-for="post in posts"
+    v-for="post in props.posts"
     :key="post.id"
     class="md:grid md:grid-cols-[1fr,2fr] md:gap-y-6 md:gap-x-4"
   >
     <!-- user & post count -->
     <figure
+      v-if="userById(post.userId)"
       class="h-fit max-h-48 rounded-md bg-orange-300 p-2 text-white shadow-md"
     >
       <div class="flex items-center md:gap-x-4">
@@ -44,14 +44,13 @@ function userById(userId){
       <div
         class="mt-6 w-full rounded-2xl bg-gray-100 py-1 px-2 text-center text-gray-700"
       >
-      <p class="flex px-2 justify-between">
-        {{ userById(post.userId).postsCount }} Posts 
-        
-        <span class="block">
-          {{ userById(post.userId).threadsCount }} Threads
-        </span>
+        <p class="flex justify-between px-2">
+          {{ userById(post.userId).postsCount }} Posts
 
-      </p>
+          <span class="block">
+            {{ userById(post.userId).threadsCount }} Threads
+          </span>
+        </p>
       </div>
     </figure>
 

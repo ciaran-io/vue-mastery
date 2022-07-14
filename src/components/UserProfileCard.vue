@@ -1,5 +1,5 @@
 <script setup>
-defineProps({
+const props = defineProps({
   user: {
     type: Object,
     required: true,
@@ -11,7 +11,7 @@ defineProps({
   <div>
     <figure>
       <img
-        :src="user.avatar"
+        :src="props.user.avatar"
         alt=""
         width="200"
         height="200"
@@ -22,30 +22,31 @@ defineProps({
         <div class="flex justify-between">
           <div class="capitalize">
             <span class="font-semibold">Username</span>
-            {{ user.username }}
+            {{ props.user.username }}
           </div>
 
           <div class="flex gap-x-4">
             <div>
               <span class="font-semibold">Posts</span>
-              {{ user.postsCount || 'No posts yet' }}
+              {{ props.user.postsCount || 'No posts yet' }}
             </div>
 
             <div>
               <span class="font-semibold">Threads</span>
-              {{ user.threadsCount || 'No threads yet' }}
+              {{ props.user.threadsCount || 'No threads yet' }}
             </div>
           </div>
         </div>
         <!-- user bio -->
         <p>
           <span class="font-semibold">Bio</span>
-          {{ user.bio || 'No bio yet' }}
+          {{ props.user.bio || 'No bio yet' }}
         </p>
       </div>
     </figure>
 
-    <router-link :to="{ name: 'ProfileEdit'}"
+    <router-link
+      :to="{ name: 'ProfileEdit' }"
       class="mt-4 ml-auto block w-max rounded-full bg-orange-500 px-4 py-2 text-white"
     >
       Edit Profile

@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import { useStore } from '@/stores/index';
+import { useStore } from '@/stores';
 
 const router = useRouter();
 const store = useStore();
@@ -14,63 +14,102 @@ const props = defineProps({
 
 // clone user object
 // eslint-disable-next-line vue/no-setup-props-destructure
-const {...activeUser} = props.user;
+const { ...user } = props.user;
 
 function updateUser() {
-  store.setUser({ ...activeUser });
+  store.setItem({ ...user });
   router.push({ name: 'Profile' });
 }
 
 function cancelUpdate() {
   router.push({ name: 'Profile' });
 }
-
 </script>
 
 <template>
   <img
-    :src="activeUser.avatar"
+    :src="user.avatar"
     :alt="`${user.image} profile pictire`"
     class="avatar avatar-profile"
     width="200"
     height="200"
   />
-  <form @submit.prevent="updateUser" class="mt-8">
+  <form
+    @submit.prevent="updateUser"
+    class="mt-8"
+  >
     <div class="">
       <div>
         <label for="name">Name</label>
-        <input type="text" name="name" v-model="activeUser.name" />
+        <input
+          type="text"
+          name="name"
+          v-model="user.name"
+        />
       </div>
 
       <div>
         <label for="username">Username</label>
-        <input type="text" name="username" v-model="activeUser.username" />
+        <input
+          type="text"
+          name="username"
+          v-model="user.username"
+        />
       </div>
 
       <div>
         <label for="website">Website</label>
-        <input type="url" name="website" v-model="activeUser.webiste" />
+        <input
+          type="url"
+          name="website"
+          v-model="user.webiste"
+        />
       </div>
 
       <div>
         <label for="location">Location</label>
-        <input type="text" name="location" v-model="activeUser.location" />
+        <input
+          type="text"
+          name="location"
+          v-model="user.location"
+        />
       </div>
 
       <div>
         <label for="email">Email</label>
-        <input type="email" name="email" v-model="activeUser.email" />
+        <input
+          type="email"
+          name="email"
+          v-model="user.email"
+        />
       </div>
 
       <div>
         <label for="bio">Bio</label>
-        <textarea type="text" name="bio" v-model="activeUser.bio"> </textarea>
+        <textarea
+          type="text"
+          name="bio"
+          v-model="user.bio"
+        >
+        </textarea>
       </div>
     </div>
 
     <div class="mt-14 grid grid-flow-col items-center gap-x-8">
-      <button @click="cancelUpdate" class="button-pill button-danger">Cancel</button>
-      <button type="submit" class="button-pill button-submit">Save</button>
+      <button
+        @click="cancelUpdate"
+        class="button-pill button-danger"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="submit"
+        class="button-pill button-submit"
+      >
+        Save
+      </button>
+      
     </div>
   </form>
 </template>

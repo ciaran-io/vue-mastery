@@ -3,6 +3,7 @@ const props = defineProps({
   categoryId: {
     type: String,
     required: false,
+    default: '',
   },
   forums: {
     type: Array,
@@ -26,7 +27,8 @@ const forumThreadsWord = (forum) => {
 <template>
   <div class="">
     <h3 class="forum-title mt-8">
-      <router-link v-if="props.categoryId"
+      <router-link
+        v-if="props.categoryId"
         :to="{ name: 'Category', params: { id: props.categoryId } }"
       >
         {{ title }}

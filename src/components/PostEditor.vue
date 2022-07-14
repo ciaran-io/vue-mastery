@@ -2,7 +2,6 @@
 import { ref } from 'vue';
 
 const emit = defineEmits(['save']);
-
 const postText = ref('');
 
 const save = () => {

@@ -1,6 +1,7 @@
 <script setup>
 import { useStore } from '@/stores/index'
-const store = useStore()
+import ForumList from './ForumList.vue';
+
 const props = defineProps({
   categories: {
     type: Array,
@@ -8,7 +9,8 @@ const props = defineProps({
   },
 });
 
-const getForumsByCategory = store.getForumsByCategory
+const store= useStore();
+const getForumsByCategory = store.getForumsByCategory;
 </script>
 
 <template>
@@ -17,6 +19,7 @@ const getForumsByCategory = store.getForumsByCategory
     :key="category.id"
     :forums="getForumsByCategory(category.id)"
     :title="category.name"
-    :categoryId="category.id"
+    :category-id="category.id"
   ></ForumList>
+
 </template>

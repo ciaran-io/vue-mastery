@@ -1,26 +1,23 @@
 <script setup>
 import { useStore } from '@/stores/index';
-import { computed } from 'vue'
+import { computed } from 'vue';
 
 defineProps({
   edit: {
     type: Boolean,
     required: false,
     default: false,
-  }
-})
+  },
+});
 
 const store = useStore();
-const user =  computed(() => store.authUser)
-
+const user = computed(() => store.authUser);
 </script>
 
 <template>
   <div>
     <section class="space-y-4 text-right">
-      <h1 class="text-xl text-orange-400">
-        {{ user.name }} recent activity
-      </h1>
+      <h1 class="text-xl text-orange-400">{{ user.name }} recent activity</h1>
       <p>See only started threads</p>
     </section>
     <hr />
@@ -31,14 +28,22 @@ const user =  computed(() => store.authUser)
     >
       <!-- user information -->
       <div>
-        <user-profile-card v-if='!edit' :user="user"> </user-profile-card>
-        <user-profile-card-editor v-else
+        <user-profile-card
+          v-if="!edit"
+          :user="user"
+        >
+        </user-profile-card>
+        <user-profile-card-editor
+          v-else
           :user="user"
         ></user-profile-card-editor>
       </div>
 
       <!-- user posts -->
-      <section aria-label="users posts" class="space-y-12">
+      <section
+        aria-label="users posts"
+        class="space-y-12"
+      >
         <post-list :posts="user.posts"></post-list>
       </section>
     </section>

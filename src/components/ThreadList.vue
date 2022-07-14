@@ -1,7 +1,9 @@
 <script setup>
 import { useStore } from '@/stores/index';
+import { findById } from '@/helpers';
+import { computed } from 'vue';
+import AppDate from './AppDate.vue';
 
-const store = useStore();
 const props = defineProps({
   threads: {
     type: Array,
@@ -9,7 +11,13 @@ const props = defineProps({
   },
 });
 
-const userById = store.getUserById;
+const store = useStore();
+
+const users = computed(() => store.users);
+// const userById = store.getUserById(users.value);
+function userById(userId) {
+  return findById(users.value, userId) || {};
+}
 
 //  Return pluralised word
 const threadPostsWord = (thread) => {
@@ -22,12 +30,15 @@ const threadPostsWord = (thread) => {
 </script>
 
 <template>
-  <section class="mt-4" aria-label="list of threads">
+  <section
+    class="mt-4"
+    aria-label="list of threads"
+  >
     <!-- List title -->
     <h3 class="forum-title">Threads</h3>
 
     <!-- Thread -->
-    <ul class="forum">
+    <ul class="forum" v-if="threads">
       <li
         v-for="thread in props.threads"
         :key="thread.id"
@@ -72,11 +83,17 @@ const threadPostsWord = (thread) => {
           />
 
           <div class="hidden md:block">
-            <router-link to="#" class="">
-              {{ userById(thread.userId).name.split(' ')[0] }}
+            <router-link
+              to="#"
+              class=""
+            >
+              <!-- {{ userById(thread.userId).name.split(' ')[0] }} -->
             </router-link>
             <br />
-            <AppDate :timestamp="thread.publishedAt" class="min-w-max" />
+            <AppDate
+              :timestamp="thread.publishedAt"
+              class="min-w-max"
+            />
           </div>
         </div>
       </li>
