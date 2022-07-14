@@ -1,13 +1,17 @@
 // Return first element that matches the param id
-export const findById = (rescources, id) => rescources.find((r) => r.id === id);
+export const findById = (resources, id) => {
+  if (!resources) return null;
+
+  return resources.find((r) => r.id === id);
+};
 
 // Return index of element that matches the param id,
-export const updateAndInsert = (rescourses, rescourse) => {
-  const index = rescourses.findIndex((el) => el.id === rescourse.id);
+export const updateAndInsert = (resources, resource) => {
+  const index = resources.findIndex((el) => el.id === resource.id);
 
-  if (rescourse.id && index !== -1) {
-    rescourses[index] = rescourse;
+  if (resource.id && index !== -1) {
+    resource[index] = resource;
   } else {
-    rescourses.push(rescourse);
+    resources.push(resource);
   }
 };
