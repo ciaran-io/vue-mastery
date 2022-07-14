@@ -1,0 +1,62 @@
+{
+  "compilerOptions": {
+    "jsx": "preserve",
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "skipLibCheck": true,
+    "strict": false,
+    "allowJs": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "node"
+    ],
+    "baseUrl": "./src",
+    "paths": {
+      "~~": [
+        "."
+      ],
+      "~": [
+        "."
+      ],
+      "~/*": [
+        "./*"
+      ],
+      "@": [
+        "."
+      ],
+      "@/*": [
+        "./*"
+      ],
+      "assets": [
+        "assets"
+      ],
+      "assets/*": [
+        "assets/*"
+      ],
+      "public": [
+        "public"
+      ],
+      "images": [
+        "assets/images"
+      ],
+      "images/*": [
+        "assets/images/*"
+      ],
+      "icons": [
+        "assets/images/icons"
+      ],
+      "icons/*": [
+        "assets/images/icons/*"
+      ],
+      "#components": [
+        "./components"
+      ],
+    }
+  },
+  "include": [
+    "./**/*"
+  ]
+}
