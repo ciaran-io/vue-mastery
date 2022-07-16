@@ -18,7 +18,7 @@ const props = defineProps({
         />
       </router-link>
 
-      <template v-if="authUser">
+      <template v-if="props.authUser.id">
         <ul class="flex items-baseline gap-x-4 justify-self-end">
           <li>
             <router-link
@@ -26,15 +26,15 @@ const props = defineProps({
               class="flex items-center gap-x-2"
             >
               <img
-                :src="authUser.avatar"
-                :alt="`${authUser.name} profile picture`"
+                :src="props.authUser.avatar"
+                :alt="`${props.authUser.name} profile picture`"
                 height="30"
                 width="30"
                 class="avatar"
               />
 
               <div class="text-gray-600">
-                {{ authUser.name }}
+                {{ props.authUser.name }}
               </div>
             </router-link>
           </li>
