@@ -1,25 +1,32 @@
 <script setup>
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import localizedDate from 'dayjs/plugin/localizedFormat';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { computed } from 'vue';
 dayjs.extend(relativeTime);
 dayjs.extend(localizedDate);
 
 const props = defineProps({
   timestamp: {
-    type: Number,
+    type: [Number, Object],
     required: true,
   },
 });
-
+const normalizedTimestamp = computed(
+  () => props.timestamp?.seconds || props.timestamp
+);
 // change unix timestamp to relative time
-const timeFromNow = () => dayjs.unix(props.timestamp).fromNow();
+const timeFromNow = computed(() =>
+  dayjs.unix(normalizedTimestamp.value).fromNow()
+);
 
-const humanReadableDate = () => dayjs.unix(props.timestamp).format('llll');
+const humanReadableDate = computed(() =>
+  dayjs.unix(normalizedTimestamp.value).format('llll')
+);
 </script>
 
 <template>
-  <div :title="humanReadableDate()">
-    {{ timeFromNow() }}
+  <div :title="humanReadableDate">
+    {{ timeFromNow }}
   </div>
 </template>
