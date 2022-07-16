@@ -1,7 +1,11 @@
 <script setup>
-import { useStore } from '@/stores';
-const store = useStore();
-const authUser = store.authUser;
+const props = defineProps({
+  authUser: {
+    type: Object,
+    required: false,
+    default: null
+  },
+});
 </script>
 
 <template>
