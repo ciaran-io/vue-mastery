@@ -1,12 +1,4 @@
 <script setup>
-import { findById } from '@/helpers/index';
-import { useStore } from '@/stores/index';
-import { computed } from 'vue';
-import { useRouter } from 'vue-router';
-import ThreadEditor from './ThreadEditor.vue';
-
-const router = useRouter();
-const store = useStore();
 const props = defineProps({
   forumId: {
     type: String,
@@ -14,11 +6,13 @@ const props = defineProps({
   },
 });
 
+const router = useRouter();
+const store = useStore();
 
 const forum = computed(() => findById(store.forums, props.forumId));
 
-(function fetchForum(){
-  store.fetchForum({ id: props.forumId})
+(function fetchForum() {
+  store.fetchForum({ id: props.forumId });
 })();
 
 async function save({ title, text }) {
@@ -27,7 +21,6 @@ async function save({ title, text }) {
     text,
     forumId: forum.value.id,
   });
-  console.log(thread);
   router.push({ name: 'ThreadDisplay', params: { id: thread.id } });
 }
 

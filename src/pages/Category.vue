@@ -1,9 +1,4 @@
 <script setup>
-import { findById } from '@/helpers';
-import { useStore } from '@/stores';
-import { computed } from 'vue';
-
-const store = useStore();
 const props = defineProps({
   id: {
     type: String,
@@ -11,11 +6,11 @@ const props = defineProps({
   },
 });
 
-const category = computed(() => findById(store.categories, props.id)) || {};
+const store = useStore();
+const category = computed(() => findById(store.categories, props.id) || {});
+const getForumsByCategory = store.getForumsByCategory;
 
-const getForumsByCategory = store.getForumsByCategory();
-
-(async function getcategories() {
+(async function getCategories() {
   const category = await store.fetchCategory({ id: props.id });
   store.fetchForums({ ids: category.forums });
 })();
@@ -24,7 +19,7 @@ const getForumsByCategory = store.getForumsByCategory();
 <template>
   <h1 class="forum-heading">{{ category.name }}</h1>
   <ForumList
-    :forums="getForumsByCategory(category)"
+    :forums="getForumsByCategory(category.id)"
     :title="category.name"
   >
   </ForumList>

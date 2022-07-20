@@ -1,10 +1,5 @@
 <script setup>
-import { useStore } from '@/stores/index';
-import { findById } from '@/helpers';
-import { computed } from 'vue';
-import AppDate from './AppDate.vue';
-
-const props = defineProps({
+ defineProps({
   threads: {
     type: Array,
     required: true,
@@ -12,7 +7,6 @@ const props = defineProps({
 });
 
 const store = useStore();
-
 const users = computed(() => store.users);
 // const userById = store.getUserById(users.value);
 function userById(userId) {
@@ -38,14 +32,17 @@ const threadPostsWord = (thread) => {
     <h3 class="forum-title">Threads</h3>
 
     <!-- Thread -->
-    <ul class="forum" v-if="threads">
+    <ul
+      v-if="threads.length"
+      class="forum"
+    >
       <li
-        v-for="thread in props.threads"
+        v-for="thread in threads"
         :key="thread.id"
         class="forum-spacing grid md:grid-cols-[2fr,1fr] md:items-center"
       >
         <div>
-          <p class="forum-link">
+          <p v-if="thread.id">
             <router-link
               :to="{ name: 'ThreadDisplay', params: { id: thread.id } }"
             >
@@ -70,7 +67,6 @@ const threadPostsWord = (thread) => {
         >
           <!-- thread count -->
           <div class="min-w-max">
-            <!-- {{ thread.posts.length + ' replies' }}  -->
             {{ thread.repliesCount }}
             {{ threadPostsWord(thread) }}
           </div>
@@ -87,7 +83,7 @@ const threadPostsWord = (thread) => {
               to="#"
               class=""
             >
-              <!-- {{ userById(thread.userId).name.split(' ')[0] }} -->
+              {{ userById(thread.userId).name?.split(' ')[0] }}
             </router-link>
             <br />
             <AppDate

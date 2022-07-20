@@ -1,8 +1,5 @@
 <script setup>
-import { useStore } from '@/stores/index'
-import ForumList from './ForumList.vue';
-
-const props = defineProps({
+defineProps({
   categories: {
     type: Array,
     required: true,
@@ -13,9 +10,9 @@ const store= useStore();
 const getForumsByCategory = store.getForumsByCategory;
 </script>
 
-<template>
+<template>    
   <ForumList
-    v-for="category in props.categories"
+    v-for="category in categories"
     :key="category.id"
     :forums="getForumsByCategory(category.id)"
     :title="category.name"

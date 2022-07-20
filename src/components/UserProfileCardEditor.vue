@@ -1,10 +1,4 @@
 <script setup>
-import { useRouter } from 'vue-router';
-import { useStore } from '@/stores';
-
-const router = useRouter();
-const store = useStore();
-
 const props = defineProps({
   user: {
     type: Object,
@@ -12,6 +6,8 @@ const props = defineProps({
   },
 });
 
+const router = useRouter();
+const store = useStore();
 // clone user object
 // eslint-disable-next-line vue/no-setup-props-destructure
 const { ...user } = props.user;
@@ -114,7 +110,7 @@ function cancelUpdate() {
   </form>
 </template>
 
-<style lang="css" scoped>
+<!-- <style lang="css" scoped>
 form {
   @apply rounded-md p-4 pt-8 shadow;
 
@@ -138,4 +134,4 @@ form {
     @apply h-40;
   }
 }
-</style>
+</style> -->

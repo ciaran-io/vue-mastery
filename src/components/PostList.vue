@@ -1,7 +1,5 @@
 <script setup>
-import { useStore } from '@/stores';
 const store = useStore();
-
 const props = defineProps({
   posts: {
     type: Array,
@@ -12,14 +10,14 @@ const props = defineProps({
 // Return user that postsed in thread
 function userById(userId) {
   return store.user(userId);
-  } 
+}
 </script>
 
 <template>
   <div
     v-for="post in props.posts"
     :key="post.id"
-    class="md:grid md:grid-cols-[1fr,2fr] md:gap-y-6 md:gap-x-4"
+    class="md:grid md:grid-cols-[1fr,2fr] md:gap-x-4 md:gap-y-6"
   >
     <!-- user & post count -->
     <figure

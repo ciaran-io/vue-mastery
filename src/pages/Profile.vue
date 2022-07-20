@@ -1,7 +1,4 @@
 <script setup>
-import { useStore } from '@/stores/index';
-import { computed } from 'vue';
-
 defineProps({
   edit: {
     type: Boolean,
@@ -15,7 +12,7 @@ const user = computed(() => store.authUser);
 </script>
 
 <template>
-  <div>
+  <div v-if="user">
     <section class="space-y-4 text-right">
       <h1 class="text-xl text-orange-400">{{ user.name }} recent activity</h1>
       <p>See only started threads</p>

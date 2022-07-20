@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+ defineProps({
   user: {
     type: Object,
     required: true,
@@ -11,7 +11,7 @@ const props = defineProps({
   <div>
     <figure>
       <img
-        :src="props.user.avatar"
+        :src="user.avatar"
         alt=""
         width="200"
         height="200"
@@ -19,28 +19,28 @@ const props = defineProps({
       />
 
       <div class="mt-8 space-y-4 rounded-md p-4 shadow-md">
-        <div class="flex justify-between">
+        <div class="flex justify-between gap-x-4">
           <div class="capitalize">
             <span class="font-semibold">Username</span>
-            {{ props.user.username }}
+            {{ user.username }}
           </div>
 
           <div class="flex gap-x-4">
             <div>
               <span class="font-semibold">Posts</span>
-              {{ props.user.postsCount || 'No posts yet' }}
+              {{ user.postsCount || 'No posts yet' }}
             </div>
 
             <div>
-              <span class="font-semibold">Threads</span>
-              {{ props.user.threadsCount || 'No threads yet' }}
+              <span class="block font-semibold">Threads</span>
+              {{ user.threadsCount || 'No threads yet' }}
             </div>
           </div>
         </div>
         <!-- user bio -->
         <p>
           <span class="font-semibold">Bio</span>
-          {{ props.user.bio || 'No bio yet' }}
+          {{ user.bio || 'No bio yet' }}
         </p>
       </div>
     </figure>

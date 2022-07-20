@@ -1,11 +1,4 @@
 <script setup>
-import { findById } from '@/helpers/index';
-import { useStore } from '@/stores';
-import { computed } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
-const store = useStore();
 const props = defineProps({
   id: {
     type: String,
@@ -13,8 +6,9 @@ const props = defineProps({
   },
 });
 
+const store = useStore();
+const router = useRouter();
 const thread = computed(() => findById(store.threads, props.id));
-
 const text = computed(() => {
   const post = findById(store.posts, thread.value.posts[0]);
   return post ? post.text : '';
@@ -26,14 +20,13 @@ const text = computed(() => {
 })();
 
 async function save({ title, text }) {
-  const thread = await store.updateThread({
+  await store.updateThread({
     title,
     text,
     id: props.id,
   });
-  router.push({ name: 'ThreadDisplay', params: { id: thread.id } });
+  router.push({ name: 'ThreadDisplay', params: { id: props.id } });
 }
-
 
 function cancel() {
   router.push({ name: 'ThreadDisplay', params: { id: props.id } });

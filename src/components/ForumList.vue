@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+ defineProps({
   categoryId: {
     type: String,
     required: false,
@@ -25,11 +25,11 @@ const forumThreadsWord = (forum) => {
 </script>
 
 <template>
-  <div class="">
+  <div  class="">
     <h3 class="forum-title mt-8">
       <router-link
-        v-if="props.categoryId"
-        :to="{ name: 'Category', params: { id: props.categoryId } }"
+        v-if="categoryId"
+        :to="{ name: 'Category', params: { id: categoryId } }"
       >
         {{ title }}
       </router-link>
@@ -38,7 +38,7 @@ const forumThreadsWord = (forum) => {
 
     <ul class="forum">
       <li
-        v-for="forum in props.forums"
+        v-for="forum in forums"
         :key="forum.id"
         class="forum-spacing grid md:grid-cols-2"
       >

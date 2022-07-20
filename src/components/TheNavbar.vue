@@ -1,11 +1,6 @@
 <script setup>
-const props = defineProps({
-  authUser: {
-    type: Object,
-    required: false,
-    default: null
-  },
-});
+const store = useStore();
+const authUser = computed(() =>  store.authUser);
 </script>
 
 <template>
@@ -18,7 +13,7 @@ const props = defineProps({
         />
       </router-link>
 
-      <template v-if="props.authUser.id">
+      <template v-if="authUser">
         <ul class="flex items-baseline gap-x-4 justify-self-end">
           <li>
             <router-link
@@ -26,15 +21,15 @@ const props = defineProps({
               class="flex items-center gap-x-2"
             >
               <img
-                :src="props.authUser.avatar"
-                :alt="`${props.authUser.name} profile picture`"
+                :src="authUser.avatar"
+                :alt="`${authUser.name} profile picture`"
                 height="30"
                 width="30"
                 class="avatar"
               />
 
               <div class="text-gray-600">
-                {{ props.authUser.name }}
+                {{ authUser.name }}
               </div>
             </router-link>
           </li>

@@ -2,7 +2,6 @@
 import dayjs from 'dayjs';
 import localizedDate from 'dayjs/plugin/localizedFormat';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { computed } from 'vue';
 dayjs.extend(relativeTime);
 dayjs.extend(localizedDate);
 

@@ -1,7 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
-
-const emit = defineEmits(['save', 'cancel']);
+const emit =defineEmits(['save', 'cancel']);
 const props = defineProps({
   title: {
     type: String,
@@ -14,8 +12,8 @@ const props = defineProps({
 });
 
 // !! operator turns variable into Boolean
-const isExistingThread = computed(() => !!props.title);
 
+const isExistingThread = computed(() => !!props.title);
 const form = ref({ title: props.title, text: props.text });
 
 function save() {

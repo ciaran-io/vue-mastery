@@ -1,8 +1,4 @@
 <script setup>
-import { findById } from '@/helpers';
-import { useStore } from '@/stores';
-import { computed } from 'vue';
-
 const props = defineProps({
   id: {
     type: String,
@@ -11,10 +7,8 @@ const props = defineProps({
 });
 
 const store = useStore();
-
 // const forum = store.getForumById(props.id);
 const forum = computed(() => findById(store.forums, props.id));
-
 
 const threads = computed(() => {
   if (!forum.value) return [];
