@@ -1,22 +1,18 @@
-import { findById } from '@/helpers/index';
-
 export default {
   user: (state) => {
     return (id) => {
       const user = findById(state.users, id);
-
       if (!user) return null;
-
       return {
         ...user,
-        // authuser.posts
-        // authuser.getPosts()
+        // get posts() == user.getPosts()
         get posts() {
           return state.posts.filter((post) => post.userId == user.id);
         },
         // authuser.postsCount
         get postsCount() {
-          return this.posts.length;
+          // return user.postsCount || 0;
+          return user.postsCount || 0;
         },
         // authuser.threads
         get threads() {
@@ -24,7 +20,7 @@ export default {
         },
         // authuser.threadsCount
         get threadsCount() {
-          return this.threads.length;
+          return user.threads?.length || 0;
         },
       };
     };

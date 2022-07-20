@@ -1,10 +1,9 @@
-import { findById, updateAndInsert } from '@/helpers/index';
-import { useStore } from '@/stores/index';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 export default {
   // Create a new posts from postEditor
+  // FIXME: Authuser postcount wont update in store
   async createPost(post) {
     // create userId fro post
     post.userId = this.authId;
@@ -17,11 +16,15 @@ export default {
       .firestore()
       .collection('threads')
       .doc(post.threadId);
-    batch.set(postRef, post);
+    const userRef = firebase.firestore().collection('users').doc(this.authId);
 
+    batch.set(postRef, post);
     batch.update(threadRef, {
       posts: firebase.firestore.FieldValue.arrayUnion(postRef.id),
       contributors: firebase.firestore.FieldValue.arrayUnion(this.authId),
+    });
+    batch.update(userRef, {
+      postsCount: firebase.firestore.FieldValue.increment(1),
     });
     await batch.commit();
     const newPost = await postRef.get();
@@ -30,11 +33,11 @@ export default {
       resource: 'posts',
       item: { ...newPost.data(), id: newPost.id },
     });
+    this.appendPostToThread({ parentId: post.threadId, childId: newPost.id });
     this.appendContributorToThread({
       parentId: post.threadId,
       childId: this.authId,
     });
-    this.appendPostToThread({ parentId: post.threadId, childId: newPost.id });
   },
 
   // Create new Thread from ThreadCreate
@@ -54,9 +57,7 @@ export default {
         userId,
         id: threadRef.id,
       };
-      console.log(thread.id);
       const batch = firebase.firestore().batch();
-
       batch.set(threadRef, thread);
       batch.update(userRef, {
         threads: firebase.firestore.FieldValue.arrayUnion(threadRef.id),
@@ -84,17 +85,26 @@ export default {
   },
 
   // Update thread post and title
+  // FIXME: Thread wont update in store unless page refresh
   async updateThread({ title, text, id }) {
     try {
       const thread = findById(this.threads, id);
       const post = findById(this.posts, thread.posts[0]);
-      const newThread = { ...thread, title };
-      const newPost = { ...post, text };
+      let newThread = { ...thread, title };
+      let newPost = { ...post, text };
+      const threadsRef = firebase.firestore().collection('threads').doc(id);
+      const postRef = firebase.firestore().collection('posts').doc(post.id);
+      const batch = firebase.firestore().batch();
+      batch.update(threadsRef, newThread);
+      batch.update(postRef, newPost);
+      await batch.commit();
 
+      newThread = await threadsRef.get();
+      newPost = await postRef.get();
       this.setItem({ resource: 'threads', item: newThread });
       this.setItem({ resource: 'posts', item: newPost });
 
-      return newThread;
+      return docToResource(newThread);
     } catch (error) {
       console.log(error);
     }
@@ -195,7 +205,7 @@ export default {
         .doc(id)
         .onSnapshot((doc) => {
           const item = { ...doc.data(), id: doc.id };
-          this.setItem({ resource, id, item });
+          this.setItem({ resource, item });
           resolve(item);
         });
     });
@@ -206,7 +216,7 @@ export default {
   },
 
   setItem({ resource, item }) {
-    updateAndInsert(this[resource], item);
+    updateAndInsert(this[resource], docToResource(item));
   },
 
   appendContributorToThread: makeAppendChildParentAction({
@@ -233,9 +243,7 @@ export default {
 function makeAppendChildParentAction({ parent, child }) {
   return ({ parentId, childId }) => {
     // NOTE: store()[parent] is the same as store().parent cant use '.' after variable
-
     const resource = findById(useStore()[parent], parentId);
-
     if (!resource) {
       console.warn(
         `Appending ${child} ${childId} to ${parent} ${parentId} failed because the parent does not exist`

@@ -15,3 +15,9 @@ export const updateAndInsert = (resources, resource) => {
     resources.push(resource);
   }
 };
+// Use a document from firestore or a resource from Pinia store
+export const docToResource = (doc) => {
+  // check if doc local resource or from firebase
+  if (typeof doc?.data !== 'function') return doc;
+  return { ...doc.data(), id: doc.id };
+};
