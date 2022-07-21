@@ -54,9 +54,14 @@ function userById(userId) {
 
     <!-- thread text -->
     <div class="mt-4 rounded bg-gray-100 px-4 pt-6 pb-2 shadow-md md:mt-0">
-      <p class="word-break">
-        {{ post.text }}
-      </p>
+      <div class="flex justify-between gap-x-12">
+        <p class="word-break">
+          {{ post.text }}
+        </p>
+        <div class=" min-w-max" >
+          <icon-mdi-pencil />
+        </div>
+      </div>
 
       <div class="mt-auto ml-auto w-max pt-8 text-orange-400">
         <AppDate :timestamp="post.publishedAt" />

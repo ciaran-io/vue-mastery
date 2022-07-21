@@ -18,6 +18,7 @@
     "vue-router": "4"
   },
   "devDependencies": {
+    "@iconify-json/mdi": "^1.1.29",
     "@vitejs/plugin-vue": "^2.3.3",
     "autoprefixer": "^10.4.7",
     "eslint": "^8.18.0",
@@ -29,6 +30,7 @@
     "prettier-plugin-tailwindcss": "^0.1.11",
     "tailwindcss": "^3.1.4",
     "unplugin-auto-import": "^0.9.3",
+    "unplugin-icons": "^0.14.7",
     "unplugin-vue-components": "^0.20.1",
     "vite": "^2.9.9"
   }

@@ -3,6 +3,8 @@ import autoprefixer from 'autoprefixer';
 import path from 'path';
 import nesting from 'tailwindcss/nesting';
 import AutoImport from 'unplugin-auto-import/vite';
+import IconsResolver from 'unplugin-icons/resolver';
+import Icons from 'unplugin-icons/vite';
 import Components from 'unplugin-vue-components/vite';
 import { defineConfig } from 'vite';
 
@@ -22,6 +24,9 @@ export default defineConfig({
     }),
     Components({
       dirs: ['./src/components', './src/pages'],
+      resolvers: [IconsResolver({ prefix: 'icon' })],
+    }),
+    Icons({
       /* options */
     }),
   ],
