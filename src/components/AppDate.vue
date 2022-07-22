@@ -8,6 +8,7 @@ dayjs.extend(localizedDate);
 const props = defineProps({
   timestamp: {
     type: [Number, Object],
+    default: null,
     required: true,
   },
 });
