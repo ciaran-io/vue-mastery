@@ -1,5 +1,4 @@
 <script setup>
-const store = useStore();
 const props = defineProps({
   posts: {
     type: Array,
@@ -7,6 +6,18 @@ const props = defineProps({
   },
 });
 
+const store = useStore();
+const editing = ref(null);
+
+function handleUpdate(event) {
+  store.updatePost(event.post);
+  editing.value = null;
+}
+
+function toggleEditMode(id) {
+  // Change editing value to id
+  editing.value ? (editing.value = null) : (editing.value = id);
+}
 // Return user that postsed in thread
 function userById(userId) {
   return store.user(userId);
@@ -52,18 +63,34 @@ function userById(userId) {
       </div>
     </figure>
 
-    <!-- thread text -->
+    <!-- post text -->
     <div class="mt-4 rounded bg-gray-100 px-4 pt-6 pb-2 shadow-md md:mt-0">
-      <div class="flex justify-between gap-x-12">
-        <p class="word-break">
+      <div :class="{ 'flex justify-between gap-x-12': editing !== post.id }">
+        <post-editor
+          v-if="editing === post.id"
+          :post="post"
+          @save="handleUpdate"
+        />
+
+        <p
+          v-else
+          class="word-break"
+        >
           {{ post.text }}
         </p>
-        <div class=" min-w-max" >
-          <icon-mdi-pencil />
-        </div>
-      </div>
 
+        <button
+          v-if="post.userId === store.authId"
+          @click.prevent="toggleEditMode(post.id)"
+          href="#"
+          class="min-w-max"
+          title="Make a change"
+        >
+          <icon-mdi-pencil />
+        </button>
+      </div>
       <div class="mt-auto ml-auto w-max pt-8 text-orange-400">
+        <div v-if="post.edited?.at">edited</div>
         <AppDate :timestamp="post.publishedAt" />
       </div>
     </div>

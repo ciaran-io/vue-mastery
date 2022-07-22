@@ -2,8 +2,23 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
 
 export default {
+  // Update posts
+  async updatePost({ text, id }) {
+    const post = {
+      text,
+      edited: {
+        at: firebase.firestore.FieldValue.serverTimestamp(),
+        by: this.authId,
+        moderated: false,
+      },
+    };
+    const postRef = firebase.firestore().collection('posts').doc(id);
+    await postRef.update(post);
+    const updatedPost = await postRef.get();
+    this.setItem({ resource: 'posts', item: updatedPost });
+  },
+
   // Create a new posts from postEditor
-  // FIXME: Authuser postcount wont update in store
   async createPost(post) {
     // create userId fro post
     post.userId = this.authId;
@@ -39,7 +54,6 @@ export default {
       childId: this.authId,
     });
   },
-
   // Create new Thread from ThreadCreate
   async createThread({ title, text, forumId }) {
     try {
@@ -85,7 +99,6 @@ export default {
   },
 
   // Update thread post and title
-  // FIXME: Thread wont update in store unless page refresh
   async updateThread({ title, text, id }) {
     try {
       const thread = findById(this.threads, id);
@@ -210,7 +223,6 @@ export default {
         });
     });
   },
-
   fetchItems({ ids, resource }) {
     return Promise.all(ids.map((id) => this.fetchItem({ id, resource })));
   },
@@ -218,7 +230,6 @@ export default {
   setItem({ resource, item }) {
     updateAndInsert(this[resource], docToResource(item));
   },
-
   appendContributorToThread: makeAppendChildParentAction({
     parent: 'threads',
     child: 'contributors',
@@ -239,10 +250,9 @@ export default {
     child: 'threads',
   }),
 };
-
 function makeAppendChildParentAction({ parent, child }) {
   return ({ parentId, childId }) => {
-    // NOTE: store()[parent] is the same as store().parent cant use '.' after variable
+    // NOTE: store()[parent] is the same as store().parent cant use '.' after variable usestore
     const resource = findById(useStore()[parent], parentId);
     if (!resource) {
       console.warn(

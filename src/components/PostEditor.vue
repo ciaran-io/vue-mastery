@@ -1,13 +1,16 @@
 <script setup>
 const emit = defineEmits(['save']);
-const postText = ref('');
+const props = defineProps({
+  post: {
+    type: Object,
+    default: () => ({ text: null }),
+  },
+});
+const postCopy = ref({ ...props.post });
 
 const save = () => {
-  const post = {
-    text: postText.value,
-  };
-  emit('save', { post });
-  postText.value = '';
+  emit('save', { post: postCopy.value });
+  postCopy.value.text = '';
 };
 </script>
 
@@ -15,7 +18,7 @@ const save = () => {
   <form @submit.prevent="save()">
     <div>
       <textarea
-        v-model="postText"
+        v-model="postCopy.text"
         name=""
         id=""
         rows="10"
@@ -24,10 +27,12 @@ const save = () => {
     </div>
 
     <div class="mt-4 text-right">
-      <button type="submit" class="buton button-pill button-primary">
-        Submit post
+      <button
+        type="submit"
+        class="buton button-pill button-primary"
+      >
+        {{ post.id ? 'Update Post' : 'Submit Post' }}
       </button>
     </div>
-    
   </form>
 </template>
