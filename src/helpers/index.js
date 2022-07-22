@@ -5,12 +5,12 @@ export const findById = (resources, id) => {
   return resources.find((r) => r.id === id);
 };
 
-// Return index of element that matches the param id,
+// Replace the recource or add resource to array
 export const updateAndInsert = (resources, resource) => {
   const index = resources.findIndex((el) => el.id === resource.id);
 
   if (resource.id && index !== -1) {
-    resource[index] = resource;
+    resources[index] = resource;
   } else {
     resources.push(resource);
   }
