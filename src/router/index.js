@@ -57,29 +57,29 @@ const routes = [
     name: 'ThreadDisplay',
     component: ThreadDisplay,
     props: true,
-    beforeEnter(to, from, next) {
-      // check if the thread exists
-      const threadExists = findById(threads, to.params.id);
-      // if exixts continue
-      if (threadExists) {
-        return next();
-      } else {
-        next({
-          name: 'NotFound',
-          // preserve current path and remove the first char to avoid the target URL starting with `//`
-          params: { pathMatch: to.path.substring(1).split('/') },
-          // preserve existing query and hash parameters
-          query: to.query,
-          hash: to.hash,
-        });
-      }
-      // if not found redirect to not
-    },
+    // beforeEnter(to, from, next) {
+    //   // check if the thread exists
+    //   const threadExists = findById(threads, to.params.id);
+    //   // if exixts continue
+    //   if (threadExists) {
+    //     return next();
+    //   } else {
+    //     next({
+    //       name: 'NotFound',
+    //       // preserve current path and remove the first char to avoid the target URL starting with `//`
+    //       params: { pathMatch: to.path.substring(1).split('/') },
+    //       // preserve existing query and hash parameters
+    //       query: to.query,
+    //       hash: to.hash,
+    //     });
+    //   }
+    //   // if not found redirect to not
+    // },
   },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ];
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior(to) {
@@ -90,3 +90,9 @@ export default createRouter({
     return scroll;
   },
 });
+
+router.beforeEach(() => {
+  const store = useStore();
+  store.unsubscribeAllSnapshots();
+});
+export default router;
