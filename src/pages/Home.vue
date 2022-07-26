@@ -1,17 +1,18 @@
 <script setup>
-const store = useStore();
-// Retrieve categories from store
-const categories = computed(() => store.categories);
+	const store = useStore();
+	const { asyncDataStatus_ready, asyncDataStatus_fectched } = asyncDataStatus();
+	const categories = computed(() => store.categories);
 
-(async function getCategories() {
-  const categories = await store.fetchAllCategories();
-  const forumIds = categories.map((category) => category.forums).flat();
+	(async function getCategories() {
+		const categories = await store.fetchAllCategories();
+		const forumIds = categories.map((category) => category.forums).flat();
 
-  store.fetchForums({ ids: forumIds });
-})();
+		await store.fetchForums({ ids: forumIds });
+		asyncDataStatus_fectched();
+	})();
 </script>
 
 <template>
-  <h1 class="forum-heading text-center">Welcome to the Forums</h1>
-  <CategoryList :categories="categories" />
+	<h1 class="forum-heading text-center">Welcome to the Forums</h1>
+	<CategoryList v-if="asyncDataStatus_ready" :categories="categories" />
 </template>
