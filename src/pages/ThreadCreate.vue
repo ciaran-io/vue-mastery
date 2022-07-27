@@ -6,14 +6,19 @@
 		},
 	});
 
+	const emit = defineEmits(['ready']);
 	const router = useRouter();
 	const store = useStore();
-	const { asyncDataStatus_ready, asyncDataStatus_fectched } = asyncDataStatus();
+	const { asyncDataStatus_ready, asyncDataStatus_fetched } =
+		useAsyncDataStatus();
 	const forum = computed(() => findById(store.forums, props.forumId));
 
 	(async function fetchForum() {
 		await store.fetchForum({ id: props.forumId });
-		asyncDataStatus_fectched();
+		asyncDataStatus_fetched();
+		//FIXME: (emit ('ready') cannot be used in composables in vue 3
+		//  called in several components
+		emit('ready');
 	})();
 
 	async function save({ title, text }) {

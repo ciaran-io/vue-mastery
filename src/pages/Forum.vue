@@ -5,9 +5,10 @@
 			required: true,
 		},
 	});
-
+	const emit = defineEmits(['ready']);
 	const store = useStore();
-	const { asyncDataStatus_ready, asyncDataStatus_fectched } = asyncDataStatus();
+	const { asyncDataStatus_ready, asyncDataStatus_fetched } =
+		useAsyncDataStatus();
 	// const forum = store.getForumById(props.id);
 	const forum = computed(() => findById(store.forums, props.id));
 
@@ -22,7 +23,10 @@
 		const threads = await store.fetchThreads({ ids: forum.threads });
 
 		await store.fetchUsers({ ids: threads.map((thread) => thread.userId) });
-		asyncDataStatus_fectched();
+		asyncDataStatus_fetched();
+		//FIXME: (emit ('ready') cannot be used in composables in vue 3
+		//  called in several components
+		emit('ready');
 	})();
 </script>
 

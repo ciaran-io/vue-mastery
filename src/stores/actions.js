@@ -188,7 +188,6 @@ export default {
 	fetchCategories({ ids }) {
 		return this.fetchItems({ resource: 'categories', ids });
 	},
-
 	// fetch forums from fb
 	fetchForums({ ids }) {
 		return this.fetchItems({ resource: 'forums', ids });

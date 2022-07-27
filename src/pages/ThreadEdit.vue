@@ -1,4 +1,5 @@
 <script setup>
+	const emit = defineEmits('ready');
 	const props = defineProps({
 		id: {
 			type: String,
@@ -8,7 +9,8 @@
 
 	const store = useStore();
 	const router = useRouter();
-	const { asyncDataStatus_ready, asyncDataStatus_fectched } = asyncDataStatus();
+	const { asyncDataStatus_ready, asyncDataStatus_fetched } =
+		useAsyncDataStatus();
 	const thread = computed(() => findById(store.threads, props.id));
 	const text = computed(() => {
 		const post = findById(store.posts, thread.value.posts[0]);
@@ -18,7 +20,8 @@
 	(async function fetchThread() {
 		const thread = await store.fetchThread({ id: props.id });
 		await store.fetchPost({ id: thread.posts[0] });
-		asyncDataStatus_fectched();
+		asyncDataStatus_fetched();
+		emit('ready');
 	})();
 
 	async function save({ title, text }) {

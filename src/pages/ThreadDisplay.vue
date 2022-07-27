@@ -1,4 +1,5 @@
 <script setup>
+	const emit = defineEmits('ready');
 	const props = defineProps({
 		id: {
 			required: true,
@@ -8,7 +9,8 @@
 
 	const router = useRouter();
 	const store = useStore();
-	const { asyncDataStatus_ready, asyncDataStatus_fectched } = asyncDataStatus();
+	const { asyncDataStatus_ready, asyncDataStatus_fetched } =
+		useAsyncDataStatus();
 
 	(async function created() {
 		// fetch trhead from fb
@@ -22,7 +24,8 @@
 
 		// fetch user for each post
 		await store.fetchUsers({ ids: users });
-		asyncDataStatus_fectched();
+		asyncDataStatus_fetched();
+		emit('ready');
 	})();
 
 	//  Return threads posts that match route params
